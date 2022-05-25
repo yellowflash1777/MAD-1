@@ -14,3 +14,8 @@ TEMPLATE=template_file.read()
 template_file.close()
 
 template=Template(TEMPLATE)
+context=template.render(data=data)
+
+new_html=open("output.html",'w')
+new_html.write(context)
+new_html.close()
