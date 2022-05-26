@@ -6,8 +6,11 @@ import sys
 from statistics import mean
 import matplotlib.pyplot as plt
 
-first_arg=sys.argv[1]
-second_arg=sys.argv[2]
+first_arg=-1
+second_arg=-1
+if len(sys.argv)==3:
+ first_arg=sys.argv[1]
+ second_arg=sys.argv[2]
 
 file = open(r"data.csv")
 reader=csv.DictReader(file,skipinitialspace=True)
@@ -39,7 +42,7 @@ if first_arg=='-s':
 
 
 
-else:
+elif first_arg=='-c':
     course_marks=list()
     for i in data:
         if i["Course id"]==second_arg:
@@ -47,7 +50,8 @@ else:
 
    
     marks={'avg':mean(course_marks),'max':max(course_marks)}
-    plt.hist(marks)
+    plt.hist(course_marks)
+    plt.savefig('saved.jpeg') 
 
     template_file=open(r"course_base.html")
     TEMPLATE=template_file.read()
@@ -55,6 +59,15 @@ else:
 
     template=Template(TEMPLATE)
     context=template.render(Marks=marks)
+
+else:
+    template_file=open(r"error_base.html")
+    TEMPLATE=template_file.read()
+    template_file.close()
+
+    template=Template(TEMPLATE)
+    context=template.render()   
+
     
 
   
