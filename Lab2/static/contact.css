@@ -1,0 +1,22 @@
+body {
+    background-color: #fdfdbb;
+}
+
+a {
+    color: #ff0000;
+}
+
+
+
+
+span {
+    color: #0000ff
+}
+
+.footer {
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    text-align: center;
+}
