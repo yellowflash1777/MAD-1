@@ -8,33 +8,21 @@
     <title>Course Data</title>
 </head>
 
-<body>
-
-
-    <div class="main">
-        <h1>Course Details</h1>
-        <table border="2" "course-details-table">
-            <tr>
-                <th>Average Marks</th>
-                <th>Maximum Marks</th>
-                
-            </tr>
-            
-            <tr>
-                <td>{{ Marks["avg"] }}</td>
-                <td>{{ Marks["max"] }}</td>
+<body>  
+    <h1>Course Details</h1>
+    <table border="2" id ="course-details-table">
+        <tr>
+            <th>Average Marks</th>
+            <th>Maximum Marks</th>                
+        </tr>            
+        <tr>
+            <td>{{ Marks["avg"] }}</td>
+            <td>{{ Marks["max"] }}</td>
               
-            </tr>
-            
-            
-        </table>
-
-        <img src="static\saved.png">
-
+        </tr>                        
+    </table>
+        <img src="static/saved.png">
         <br>
-        <a href="\">Go Back</a>
-    </div>
-
+        <a href="/">Go Back</a>  
 </body>
-
 </html>
