@@ -1,0 +1,23 @@
+.container {
+    width: 70%;
+    min-width: 50%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .kanban-heading {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-family: sans-serif;
+  }
+  
+  .kanban-heading-text {
+    font-size: 1.8rem;
+    background-color: tomato;
+    padding: 0.8rem 1.7rem;
+    border-radius: 0.5rem;
+    margin: 1rem;
+  }
+  
