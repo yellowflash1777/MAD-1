@@ -48,7 +48,7 @@ def login_validation():
     rows=rows.fetchall()
     cursor.close()
     if len(rows)==1:
-        return render_template('kanban.html',name=username)
+        return render_template('home.html',name=username)
     else:
         return redirect('/')
 
