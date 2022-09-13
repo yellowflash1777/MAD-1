@@ -6,7 +6,9 @@ import os
 app=Flask(__name__)
 
 #currentlocation=os.path.dirname(os.path.dirpath(__file))
-
+@app.route("/listform")
+def listform():
+    return render_template("listform.html")
 
 @app.route("/")
 def login():
