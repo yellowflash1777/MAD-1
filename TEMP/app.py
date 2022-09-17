@@ -6,9 +6,28 @@ import os
 app=Flask(__name__)
 
 #currentlocation=os.path.dirname(os.path.dirpath(__file))
-@app.route("/listform")
+@app.route("/listform",methods=['GET','POST'])
 def listform():
-    return render_template("listform.html")
+    if request.method=='POST':
+        lname=request.form['name']
+        desc=request.form['desc']
+        name=username
+        print(lname,desc,name)
+        sqlconnection=sqlite3.Connection('newdb.sqlite3')
+        cursor=sqlconnection.cursor()
+
+        query1="insert into LISTS(NAME,DESCRIPTION,USERNAME) values ('{}','{}','{}')".format(lname,desc,name)
+        #print(query1)
+        cursor.execute(query1)
+        sqlconnection.commit()
+        cursor.close()
+        return redirect('/kanban')
+    else:
+        return render_template("listform.html")
+
+@app.route("/kanban")
+def kanban():
+    return render_template("kanban.html")
 
 @app.route("/")
 def login():
@@ -36,6 +55,7 @@ def signup():
 
 @app.route("/login_validation",methods=['POST'])
 def login_validation():
+    global username
     username=request.form.get('username')
     password=request.form.get('password')
 
@@ -50,7 +70,7 @@ def login_validation():
     rows=rows.fetchall()
     cursor.close()
     if len(rows)==1:
-        return render_template('home.html',name=username)
+        return render_template('home.html',name=username),username
     else:
         return redirect('/')
 
