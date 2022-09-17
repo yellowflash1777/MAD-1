@@ -16,7 +16,7 @@ def listform():
         sqlconnection=sqlite3.Connection('newdb.sqlite3')
         cursor=sqlconnection.cursor()
 
-        query1="insert into LISTS(NAME,DESCRIPTION,USERNAME) values ('{}','{}','{}')".format(lname,desc,name)
+        query1="insert into LISTS(NAME,DESC,USERNAME) values ('{}','{}','{}')".format(lname,desc,name)
         #print(query1)
         cursor.execute(query1)
         sqlconnection.commit()
