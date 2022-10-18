@@ -31,11 +31,6 @@ def student_create():
             return redirect(url_for("home"))
     return render_template("create_student.html")
 
-@app.route("/articles_by/<user_name>", methods=["GET", "POST"])
-def articles_by_author(user_name):
-    articles = Article.query.filter(Article.authors.any(username=user_name))
-    return render_template("articles_by_author.html", articles=articles, username=user_name)
-
 @app.route("/student/<rollno>/update", methods=["GET", "POST"])
 def update_student(rollno):
     if request.method == "POST":
@@ -53,3 +48,10 @@ def update_student(rollno):
     student = Student.query.filter_by(roll_number=rollno).first()
     
     return render_template("update_student.html", student=student) 
+
+@app.route("/student/<rollno>/delete", methods=["GET", "POST"])
+def delete_student(rollno):
+    student = Student.query.filter_by(roll_number=rollno).first()
+    db.session.delete(student)
+    db.session.commit()
+    return redirect(url_for("home"))
