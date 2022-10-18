@@ -11,17 +11,24 @@ def home():
 
 @app.route("/student/create", methods=["GET", "POST"])
 def student_create():
-    if request.method == "POST":        
+    if request.method == "POST":               
         roll_number = request.form.get("roll")
         first_name = request.form.get("f_name")
         last_name = request.form.get("l_name")
         courseid = request.form.get("courses")
-        course = Course.query.filter_by(course_id=courseid).first()
-        student = Student(roll_number=roll_number, first_name=first_name, last_name=last_name)
-        student.courses.append(course)
-        db.session.add(student)
-        db.session.commit()
-        return redirect(url_for("home"))
+        l=[]
+        rollList=Student.query.with_entities(Student.roll_number).all()
+        for i in range(len(rollList)):
+            l.append(rollList[i][0])
+        if roll_number in l:
+            return render_template("already.html")
+        else:
+            course = Course.query.filter_by(course_id=courseid).first()
+            student = Student(roll_number=roll_number, first_name=first_name, last_name=last_name)
+            student.courses.append(course)
+            db.session.add(student)        
+            db.session.commit()
+            return redirect(url_for("home"))
     return render_template("create_student.html")
 
 @app.route("/articles_by/<user_name>", methods=["GET", "POST"])
