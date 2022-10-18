@@ -7,19 +7,20 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Add Student</h1>
-    <form action="/student/create" method="POST" id="create-form">
+    <h1>Update Student {{student.roll_number}}</h1>
+    <form action="/student/{{student.roll_number}}/update" method="POST" id="update-form">
+        
         <div>
         <label>Roll Number:</label>
-        <input type="text" name="roll" required />
+        <input type="text" name="roll" value="{{student.roll_number}}" disabled />
         </div>
         <div>
         <label>First Name:</label>
-        <input type="text" name="f_name" required />
+        <input type="text" name="f_name" value="{{student.first_name}}" required />
         </div>
         <div>
         <label>Last Name:</label>
-        <input type="text" name="l_name" />
+        <input type="text" name="l_name" value="{{student.last_name}}"/>
         </div>
         <div>
         <label>Select Courses: </label>
@@ -36,6 +37,5 @@
         <input type="submit" method="POST" value = "Submit">
         </div>
         </form>
-        
 </body>
 </html>

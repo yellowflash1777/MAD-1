@@ -21,7 +21,7 @@ def student_create():
         for i in range(len(rollList)):
             l.append(rollList[i][0])
         if roll_number in l:
-            return render_template("already.html")
+            return render_template("error.html")
         else:
             course = Course.query.filter_by(course_id=courseid).first()
             student = Student(roll_number=roll_number, first_name=first_name, last_name=last_name)
@@ -35,3 +35,21 @@ def student_create():
 def articles_by_author(user_name):
     articles = Article.query.filter(Article.authors.any(username=user_name))
     return render_template("articles_by_author.html", articles=articles, username=user_name)
+
+@app.route("/student/<rollno>/update", methods=["GET", "POST"])
+def update_student(rollno):
+    if request.method == "POST":
+        first_name = request.form.get("f_name")
+        last_name = request.form.get("l_name")
+        courseid = request.form.get("courses")
+        course = Course.query.filter_by(course_id=courseid).all()
+        student = Student.query.filter_by(roll_number=rollno).first()
+        
+        student.first_name = first_name
+        student.last_name = last_name
+        student.courses.extend(course)
+        db.session.commit()
+        return redirect(url_for("home"))
+    student = Student.query.filter_by(roll_number=rollno).first()
+    
+    return render_template("update_student.html", student=student) 
