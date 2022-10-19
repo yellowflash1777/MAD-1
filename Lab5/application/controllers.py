@@ -49,9 +49,14 @@ def update_student(rollno):
     
     return render_template("update_student.html", student=student) 
 
-@app.route("/student/<rollno>/delete", methods=["GET", "POST"])
+@app.route("/student/<rollno>/delete", methods=["GET"])
 def delete_student(rollno):
     student = Student.query.filter_by(roll_number=rollno).first()
     db.session.delete(student)
     db.session.commit()
     return redirect(url_for("home"))
+
+@app.route("/student/<rollno>", methods=["GET"])
+def student_details(rollno):
+    student = Student.query.filter_by(roll_number=rollno).first()
+    return render_template("student_details.html", student=student ,len=len(student.courses))
