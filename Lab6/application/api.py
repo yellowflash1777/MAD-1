@@ -1,9 +1,12 @@
+from email import message
+from xml.dom import ValidationErr
 from flask_restful import Resource
-from flask_restful import marshal_with,fields
+from flask_restful import marshal_with,fields,reqparse
 from application.database import db
 from application.models import Course, Enrollments, Student
-from application.validation import NotFoundError
+from application.validation import NotFoundError,ValidationError,BadError
 
+#fields
 course_fields={
     "course_id":fields.Integer,
     "course_name":fields.String,
@@ -23,6 +26,20 @@ enrollment_feilds={
     "course_id":fields.Integer
 }
 
+#requestParser()
+create_course_parser= reqparse.RequestParser()
+create_course_parser.add_argument('course_name')
+create_course_parser.add_argument('course_code')
+create_course_parser.add_argument('course_description')
+
+create_student_parser= reqparse.RequestParser()
+create_student_parser.add_argument('first_name')
+create_student_parser.add_argument('last_name')
+create_student_parser.add_argument('roll_number')
+
+create_enrollment_parser= reqparse.RequestParser()
+create_student_parser.add_argument('course_id')
+
 class CourseAPI(Resource):
 
     @marshal_with(course_fields)
@@ -38,9 +55,25 @@ class CourseAPI(Resource):
 
     def delete(self,course_id):
         pass
-
+    
+    @marshal_with(course_fields)
     def post(self):
-        pass
+        args=create_course_parser.parse_args()
+        course_name=args.get('course_name',None)
+        course_code=args.get('course_code',None)
+        course_description=args.get('course_description',None)
+        if course_code is None:
+            raise ValidationError(status_code=400,error_code="COURSE002",error_message="Course Code is required")
+        if course_name is None:
+            raise ValidationError(status_code=400,error_code="COURSE001",error_message="Course Name is required")
+
+        course=db.session.query(Course).filter(Course.course_code==course_code).first()
+        if course:
+            raise BadError(status_code=409, message='course_code already exist')
+        course=Course(course_name=course_name,course_code=course_code,course_description=course_description)
+        db.session.add(course)
+        db.session.commit()
+        return course
 
 
 class StudentAPI(Resource):
@@ -59,8 +92,24 @@ class StudentAPI(Resource):
     def delete(self,student_id):
         pass
 
+    @marshal_with(student_feilds)
     def post(self):
-        pass
+        args=create_student_parser.parse_args()
+        first_name=args.get('first_name',None)
+        last_name=args.get('last_name',None)
+        roll_number=args.get('roll_number',None)
+        if first_name is None:
+            raise ValidationError(status_code=400,error_code="STUDENT002",error_message="First Name is required")
+        if roll_number is None:
+            raise ValidationError(status_code=400,error_code="STUDENT001",error_message="Roll No is required")
+
+        student=db.session.query(Student).filter(Student.roll_number==roll_number).first()
+        if student:
+            raise BadError(status_code=409, message='Student already exist')
+        student=Student(first_name=first_name,last_name=last_name,roll_number=roll_number)
+        db.session.add(student)
+        db.session.commit()
+        return student
 
 class EnrollmentAPI(Resource):
 
