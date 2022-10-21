@@ -4,6 +4,7 @@ from flask_restful import Api
 from application import config
 from application.config import LocalDevelopmentConfig
 from application.database import db
+from flask_restful import Resource
 
 app = None
 api = None
@@ -26,11 +27,11 @@ app ,api= create_app()
 from application.controllers import *
 
 #Import restful controllers
-from application.api import *
+from application.api import CourseAPI,StudentAPI,EnrollmentAPI
 
-api.add_resource(CourseAPI,'/api/course','/api/course/{course_id}')
-api.add_resource(StudentAPI,'/api/student','/api/student/{student_id}')
-api.add_resource(EnrollmentAPI,'/api/student/{student_id}/course','/api/student/{student_id}/course/{course_id}')
+api.add_resource(CourseAPI,'/api/course','/api/course/<int:course_id>')
+api.add_resource(StudentAPI,'/api/student','/api/student/<int:student_id>')
+api.add_resource(EnrollmentAPI,'/api/student/<int:student_id>/course','/api/student/<int:student_id>/course/<int:course_id>')
 
 
 if __name__ == '__main__':

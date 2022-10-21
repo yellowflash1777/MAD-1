@@ -18,5 +18,5 @@ class Course(db.Model):
 class Enrollments(db.Model):
     __tablename__ = 'enrollments'
     enrollment_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    estudent_id = db.Column(db.Integer, db.ForeignKey('student.student_id'), nullable=False)
-    ecourse_id = db.Column(db.Integer, db.ForeignKey('course.course_id'), nullable=False)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.student_id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('course.course_id'), nullable=False)
