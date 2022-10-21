@@ -2,6 +2,7 @@ from email import message
 from xml.dom import ValidationErr
 from flask_restful import Resource
 from flask_restful import marshal_with,fields,reqparse
+from sqlalchemy import and_
 from application.database import db
 from application.models import Course, Enrollments, Student
 from application.validation import NotFoundError,ValidationError,BadError
@@ -76,7 +77,17 @@ class CourseAPI(Resource):
         
 
     def delete(self,course_id):
-        pass
+        
+        #students=db.session.query(Course).filter(Course.students.any(course_id=course_id)).first()
+        #if students is not None:
+            
+        course=db.session.query(Course).filter(Course.course_id==course_id).first()        
+        if course:
+            db.session.delete(course)
+            db.session.commit()
+            return 'Succefully Deleted',200
+        else:
+            raise NotFoundError(status_code=404)
     
     @marshal_with(course_fields)
     def post(self):
@@ -133,7 +144,14 @@ class StudentAPI(Resource):
 
 
     def delete(self,student_id):
-        pass
+        student=db.session.query(Student).filter(Student.student_id==student_id).first()
+        if student:
+            db.session.delete(student)
+            db.session.commit()
+            return 'Succefully Deleted',200
+
+        else:
+            raise NotFoundError(status_code=404)
 
     @marshal_with(student_feilds)
     def post(self):
@@ -174,9 +192,7 @@ class EnrollmentAPI(Resource):
         else:
             raise ValidationError(status_code=400,error_code="ENROLLMENT002",error_message="Student does not exist")
         
-        print('*************************************************')
-        print(course_id)
-        print('*************************************************')
+        
         if course_id is None:
             raise ValidationError(status_code=400,error_code="ENROLLMENT003",error_message="Course id is required")
         course=db.session.query(Course).filter(Course.course_id==course_id).first()
@@ -192,6 +208,21 @@ class EnrollmentAPI(Resource):
 
 
     def delete(self,student_id,course_id):
-        pass
-
-#raise ValidationError(status_code=400,error_code="ENROLLMENT001",error_message="Course does not exist")
+        course=db.session.query(Course).filter(Course.course_id==course_id).first()
+        if course:
+            pass
+        else:
+            raise ValidationError(status_code=400,error_code="ENROLLMENT001",error_message="Course does not exist")        
+        student=db.session.query(Student).filter(Student.student_id==student_id).first()
+        if student:
+            pass
+        else:
+            raise ValidationError(status_code=400,error_code="ENROLLMENT002",error_message="Student does not exist")
+        enrollments=db.session.query(Enrollments).filter(and_(Enrollments.student_id==student_id , Enrollments.course_id==course_id)).first()
+        print(enrollments.course_id)
+        if enrollments:
+            db.session.delete(enrollments)
+            db.session.commit()
+            return 'Succefully Deleted',200
+        else:
+            raise NotFoundError(status_code=404)
