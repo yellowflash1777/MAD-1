@@ -2,7 +2,7 @@ from flask import Flask, redirect, request, url_for
 from flask import render_template
 from flask import current_app as app
 from .database import db
-from application.models import  Course, Student
+from application.models import  Course, Enrollments, Student
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -60,3 +60,10 @@ def delete_student(rollno):
 def student_details(rollno):
     student = Student.query.filter_by(roll_number=rollno).first()
     return render_template("student_details.html", student=student ,len=len(student.courses))
+
+@app.route("/student/<student_id>/withdraw/<course_id>")
+def withdraw(student_id,course_id):
+    enrollment=Enrollments.query.filter_by(student_id=student_id,course_id=course_id).first()
+    db.session.delete(enrollment)
+    db.session.commit()
+    return redirect(url_for("home"))
