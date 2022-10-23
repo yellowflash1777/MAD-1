@@ -7,8 +7,8 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Student Details : {{student.courses}}</h1>
-    <table id = "personal-details" border="1">
+    <h1>Student Details : {{student.student_id}}</h1>
+    <table id = "student-detail" border="1">
         <tr>
         <th>Roll Number</th>
         <th>First Name</th>
@@ -30,6 +30,7 @@
         <th>Course Code</th>
         <th>Course Name</th>
         <th>Course Description</th>
+        <th>Actions</th>
         </tr>
         {% for i in range(0,len) %}
         <tr>
@@ -37,6 +38,9 @@
         <td>{{student.courses[i].course_code}}</td>
         <td>{{student.courses[i].course_name}}</td>
         <td>{{student.courses[i].course_description}}</td>
+        <td>
+            <a href="/student/{{student.student_id}}/withdraw/{{student.courses[i].course_id}}">Withdraw</a>
+        </td>
         </tr>
         {% endfor %}
         </table>
