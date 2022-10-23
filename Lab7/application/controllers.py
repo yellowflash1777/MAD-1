@@ -67,3 +67,8 @@ def withdraw(student_id,course_id):
     db.session.delete(enrollment)
     db.session.commit()
     return redirect(url_for("home"))
+
+@app.route("/courses")
+def course():
+    courses=Course.query.all()
+    return render_template("courses.html",course=courses)
