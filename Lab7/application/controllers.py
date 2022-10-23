@@ -106,3 +106,11 @@ def update_course(courseid):
     course = Course.query.filter_by(course_id=courseid).first()
     
     return render_template("update_course.html", course=course)
+
+
+@app.route("/course/<courseid>/delete", methods=["GET"])
+def delete_course(courseid):
+    course = Course.query.filter_by(course_id=courseid).first()
+    db.session.delete(course)
+    db.session.commit()
+    return redirect(url_for("course"))
