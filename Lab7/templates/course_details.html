@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Course Details : {{course.course_code}}</h1>
+    <table id = "course-detail" border="1">
+        <tr>
+        <th>Course Code</th>
+        <th>Course Name</th>
+        <th>Course Description</th>
+        </tr>
+        
+        <tr>
+        <td>{{course.course_code}}</td>
+        <td>{{course.course_name}}</td>
+        <td>{{course.course_description}}</td>
+        </tr>
+        
+    </table>
+
+    <h1> Enrollments</h1>
+    <table id = "course-table" border="1">
+        <tr>
+        <th>S. No.</th>
+        <th>Roll No</th>
+        <th>Student First Name</th>
+        <th>Student Last Name</th>
+        
+        </tr>
+        {% for i in range(0,len) %}
+        <tr>
+        <td>{{i+1}}</td>
+        <td>{{course.students[i].roll_number}}</td>
+        <td>{{course.students[i].first_name}}</td>
+        <td>{{course.students[i].last_name}}</td>
+    
+        </tr>
+        {% endfor %}
+        </table>
+        <br>
+    <a href="/course">Course Lists</a>
+</body>
+</html>

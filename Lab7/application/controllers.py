@@ -114,3 +114,8 @@ def delete_course(courseid):
     db.session.delete(course)
     db.session.commit()
     return redirect(url_for("course"))
+
+@app.route("/course/<courseid>", methods=["GET"])
+def course_details(courseid):
+    course = Course.query.filter_by(course_id=courseid).first()
+    return render_template("course_details.html", course=course ,len=len(course.students))
