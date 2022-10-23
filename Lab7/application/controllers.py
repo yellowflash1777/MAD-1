@@ -1,6 +1,8 @@
+from imghdr import what
 from flask import Flask, redirect, request, url_for
 from flask import render_template
 from flask import current_app as app
+from numpy import who
 from .database import db
 from application.models import  Course, Enrollments, Student
 
@@ -21,7 +23,7 @@ def student_create():
         for i in range(len(rollList)):
             l.append(rollList[i][0])
         if roll_number in l:
-            return render_template("error.html")
+            return render_template("error.html",who='Student',what='Roll No',where='')
         else:
             course = Course.query.filter_by(course_id=courseid).first()
             student = Student(roll_number=roll_number, first_name=first_name, last_name=last_name)
@@ -68,7 +70,39 @@ def withdraw(student_id,course_id):
     db.session.commit()
     return redirect(url_for("home"))
 
-@app.route("/courses")
+@app.route("/course")
 def course():
     courses=Course.query.all()
     return render_template("courses.html",course=courses)
+
+@app.route("/course/create", methods=["GET", "POST"])
+def course_create():
+    if request.method == "POST":               
+        course_code = request.form.get("code")
+        course_name = request.form.get("c_name")
+        course_description = request.form.get("desc")        
+        course=Course.query.filter_by(course_code=course_code).first()
+        if course:
+            return render_template("error.html",who='Course',what='Course code',where='course')
+        else:
+            course=Course(course_code=course_code,course_name=course_name,course_description=course_description)
+            db.session.add(course)        
+            db.session.commit()
+            return redirect(url_for("course"))
+    return render_template("create_course.html")
+
+@app.route("/course/<courseid>/update", methods=["GET", "POST"])
+def update_course(courseid):
+    if request.method == "POST":
+        course_name = request.form.get("c_name")
+        course_description = request.form.get("desc")
+        
+        course = Course.query.filter_by(course_id=courseid).first()
+        course.course_name=course_name
+        course.course_description=course_description    
+    
+        db.session.commit()
+        return redirect(url_for("course"))
+    course = Course.query.filter_by(course_id=courseid).first()
+    
+    return render_template("update_course.html", course=course)
